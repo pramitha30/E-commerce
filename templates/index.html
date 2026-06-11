@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ShopNow</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+    <h2>ShopNow</h2>
+
+    <form method="GET" action="/">
+        <input type="text" name="search" placeholder="Search products...">
+        <button type="submit">Search</button>
+    </form>
+
+    <div>
+        <a href="/cart">
+            Cart ({{ session['cart']|length if session.get('cart') else 0 }})
+        </a>
+        |
+        Welcome {{ session['user_name'] }}
+        |
+        <a href="/admin">Admin</a>
+        |
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
+    {% for product in products %}
+        <div class="card">
+            <img src="{{ url_for('static', filename='images/' + product.image) }}" class="product-img">
+            <h3>{{ product.name }}</h3>
+            <p>₹{{ product.price }}</p>
+            <p>Stock: {{ product.stock }}</p>
+
+            {% if product.stock > 0 %}
+    <a href="/add_to_cart/{{ product.id }}">
+        <button class="add-btn">Add to Cart</button>
+    </a>
+{% else %}
+    <button class="disabled-btn" disabled>Out of Stock</button>
+{% endif %}
+        </div>
+    {% endfor %}
+</div>
+
+</body>
+</html>
